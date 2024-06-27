@@ -1,5 +1,6 @@
 package com.example.collegeapp
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -12,6 +13,7 @@ class AfterLoginPage : AppCompatActivity() {
 
     private lateinit var favAddTask: FloatingActionButton
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

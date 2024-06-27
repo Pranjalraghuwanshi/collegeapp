@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -33,11 +34,20 @@ class CreateTaskDialog : DialogFragment() {
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 
+
+
     private fun saveTaskToFirestore() {
         val title = titleEditText.text.toString()
         val amount = amountEditText.text.toString()
 
-        val task = Task(title, amount) // Create Task object
+        val userId = Firebase.auth.currentUser?.uid // Get current user ID
+
+
+
+        val task = hashMapOf(
+            "title" to title,
+            "amount" to amount,
+            "userId" to userId)
 
         val db = Firebase.firestore
         val taskCollection = db.collection("tasks")

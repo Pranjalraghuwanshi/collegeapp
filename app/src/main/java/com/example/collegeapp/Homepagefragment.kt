@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -21,7 +22,7 @@ class Homepagefragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.homepagefragment, container, false)
-        recyclerView = view.findViewById(R.id.rv_task_list) // Find your RecyclerView (adjust ID if needed)
+        recyclerView = view.findViewById(R.id.rv_task_list)
         taskAdapter = TaskAdapter()
         recyclerView.adapter = taskAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -34,22 +35,30 @@ class Homepagefragment : Fragment() {
     }
 
     private fun fetchTasksFromFirestore() {
-        val db= Firebase.firestore
-        val tasksCollection = db.collection("tasks")
-        tasksCollection.addSnapshotListener { snapshot, e ->
-            if (e != null) {
-                // Handle errors
-                return@addSnapshotListener
-            }
+        val userId = Firebase.auth.currentUser?.uid // Get current user ID
+        if (userId != null) {
+            val db = Firebase.firestore
+            val tasksCollection = db.collection("tasks")
+                .whereEqualTo("userId", userId) // Use "userId" (lowercase) to match your Firestore field
 
-            val taskList = mutableListOf<Task>()
-            if (snapshot != null) {
-                for (document in snapshot) {
-                    val task = document.toObject(Task::class.java)
-                    taskList.add(task)
+            tasksCollection.addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    // Handle errors
+                    return@addSnapshotListener
                 }
+
+                val taskList = mutableListOf<Task>()
+                if (snapshot != null) {
+                    for (document in snapshot) {
+                        val task = document.toObject(Task::class.java)
+                        taskList.add(task)
+                    }
+                }
+                taskAdapter.updateTasks(taskList)
             }
-            taskAdapter.updateTasks(taskList)
+        } else {
+            // Handle the case where the user is not authenticated
+            // You might want to show a message or redirect to the login screen
         }
     }
 }
