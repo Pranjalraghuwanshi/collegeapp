@@ -5,15 +5,51 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
-class Homepagefragment:Fragment() {
+class Homepagefragment : Fragment() {
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var taskAdapter: TaskAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view=inflater.inflate(R.layout.homepagefragment,container,false)
+        val view = inflater.inflate(R.layout.homepagefragment, container, false)
+        recyclerView = view.findViewById(R.id.rv_task_list) // Find your RecyclerView (adjust ID if needed)
+        taskAdapter = TaskAdapter()
+        recyclerView.adapter = taskAdapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        fetchTasksFromFirestore()
+    }
+
+    private fun fetchTasksFromFirestore() {
+        val db= Firebase.firestore
+        val tasksCollection = db.collection("tasks")
+        tasksCollection.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                // Handle errors
+                return@addSnapshotListener
+            }
+
+            val taskList = mutableListOf<Task>()
+            if (snapshot != null) {
+                for (document in snapshot) {
+                    val task = document.toObject(Task::class.java)
+                    taskList.add(task)
+                }
+            }
+            taskAdapter.updateTasks(taskList)
+        }
     }
 }

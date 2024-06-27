@@ -28,6 +28,17 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="50dp"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/addfloatingbutton"
+        android:background="@color/cardview_dark_background"
+        app:fabSize="normal"
+
+        app:layout_constraintBottom_toTopOf="@id/nav_view"/>
+
     <Toolbar
         android:layout_width="match_parent"
         android:layout_height="50dp"

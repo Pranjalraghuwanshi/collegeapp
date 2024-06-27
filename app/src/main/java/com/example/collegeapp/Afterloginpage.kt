@@ -1,19 +1,26 @@
 package com.example.collegeapp
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class AfterLoginPage : AppCompatActivity() {
+
+    private lateinit var favAddTask: FloatingActionButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_afterloginpage)
 
+        favAddTask =findViewById(R.id.fab_add_task)
+            favAddTask.setOnClickListener { showAddTaskDialog() }
+
+        // Set up BottomNavigationView (this can stay here)
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.nav_view)
         openFragment(Homepagefragment()) // Open the default fragment
 
@@ -23,11 +30,12 @@ class AfterLoginPage : AppCompatActivity() {
                     openFragment(Homepagefragment())
                     true
                 }
-                R.id.navigation_yourpost -> {openFragment(Homepagefragment()) // Replace with your actual fragment class
+                R.id.navigation_yourpost -> {
+                    openFragment(yourpostfragment())
                     true
                 }
                 R.id.navigation_yourwork -> {
-                    openFragment(Homepagefragment()) // Replace with your actual fragment class
+                    openFragment(yourworkfragment())
                     true
                 }
                 else -> false
@@ -35,9 +43,14 @@ class AfterLoginPage : AppCompatActivity() {
         }
     }
 
+    private fun showAddTaskDialog() {
+        val dialog = CreateTaskDialog()
+        dialog.show(supportFragmentManager, "create_task_dialog")
+    }
+
     private fun openFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentholder, fragment) // Use the correct container ID
+            .replace(R.id.fragmentholder, fragment)
             .commit()
     }
 }

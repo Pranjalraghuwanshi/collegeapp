@@ -12,36 +12,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Collegeapp"
         tools:targetApi="31">
+
         <activity
-            android:name=".Afterloginpage"
-            android:exported="false" />
-        <activity
-            android:name=".afterlogin"
+            android:name=".AfterLoginPage"
             android:exported="false"
             android:label="@string/title_activity_afterlogin" />
+
         <activity
-            android:name=".Afterloginactivity"
-            android:exported="false" />
-        <activity
-            android:name=".afterloginactivity"
-            android:exported="false"
-            android:theme="@style/Theme.Collegeapp" />
-        <activity
-            android:name=".MainActivity2"
+            android:name=".Homeactivity"
             android:exported="false"
             android:label="@string/title_activity_main2"
             android:theme="@style/Theme.Collegeapp.NoActionBar" />
-        <activity
-            android:name=".ScrollingActivity"
-            android:exported="false"
-            android:label="@string/title_activity_scrolling"
-            android:theme="@style/Theme.Collegeapp.NoActionBar" />
+
         <activity
             android:name=".Sign_up"
             android:exported="false" />
-        <activity
-            android:name=".Homeactivity"
-            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
